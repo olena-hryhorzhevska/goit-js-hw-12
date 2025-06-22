@@ -8,6 +8,38 @@ import {
   hideLoadMoreButton,
 } from './js/render-functions';
 
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
+function showNoResultsToast() {
+  iziToast.show({
+    message:
+      'Sorry, there are no images matching your search query. Please try again!',
+    backgroundColor: '#EF4040',
+    messageColor: '#FAFAFB',
+    iconUrl: './img/cross.png',
+  });
+  return;
+}
+
+function showEndOfResultsToast() {
+  iziToast.show({
+    position: 'topRight',
+    backgroundColor: 'rgb(137, 207, 240, 0.8)',
+    message: `We're sorry, but you've reached the end of search results.`,
+    messageColor: 'black',
+  });
+  return;
+}
+
+function showErrorToast(error) {
+  iziToast.show({
+    message: `Error: ${error.message}`,
+    backgroundColor: '#EF4040',
+    messageColor: '#FAFAFB',
+  });
+}
+
 const form = document.querySelector('.form');
 const loadMoreBtn = document.querySelector('.load-more-btn');
 
@@ -23,42 +55,58 @@ async function handleSubmit(event) {
   event.preventDefault();
   page = 1;
   clearGallery();
+  hideLoadMoreButton();
   showLoader();
   input = event.currentTarget.elements['search-text'].value;
   try {
+    // await new Promise(resolve => setTimeout(resolve, 1000))
     const { images, totalHits } = await getImagesByQuery(input, page);
+    if (images.length === 0) {
+      showNoResultsToast();
+    }
 
-    if (images.length > 0) {
-      createGallery(images);
-      totalPages = Math.ceil(totalHits / perPage);
+    createGallery(images);
+    totalPages = Math.ceil(totalHits / perPage);
 
-      if (page < totalPages) {
-        showLoadMoreButton();
-      } else {
-        hideLoadMoreButton();
-      }
-    } else {
-      hideLoadMoreButton();
+    if (page < totalPages) {
+      showLoadMoreButton();
+    } else if (page === totalPages) {
+      showEndOfResultsToast();
     }
   } catch (error) {
-
+    showErrorToast(error);
   } finally {
     hideLoader();
   }
 }
 
-function handleLoadMore() {
+async function handleLoadMore() {
   page++;
+  hideLoadMoreButton();
   showLoader();
-  getImagesByQuery(input, page)
-    .then(({ images }) => {
-      createGallery(images);
+
+  try {
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const { images } = await getImagesByQuery(input, page);
+    createGallery(images);
+
+    const firstCard = document.querySelector('.gallery li');
+    const cardHeight = firstCard.getBoundingClientRect().height;
+    window.scrollBy({
+      top: cardHeight * 2,
+      behavior: 'smooth',
+    });
+
+    if (page === totalPages) {
+      showEndOfResultsToast();
+    }
+
+    if (page < totalPages) {
       showLoadMoreButton();
-      if (page < totalPages) {
-        showLoadMoreButton();
-      } else {
-        hideLoadMoreButton();
-      }
-    })
-    .finally(() => hideLoader());
+    }
+  } catch (error) {
+    showErrorToast(error);
+  } finally {
+    hideLoader();
+  }
 }

@@ -43,9 +43,18 @@ input:active{
 }
 
 .load-more-btn {
+  margin: 0 auto;
   margin-top: 32px;
-  width: 120px;
+  margin-bottom: 44px;
+  width: 125px;
   height: 40px;
+  background-color: #4E75FF;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
+  font-family: 'monsterrat', sans-serif;
 }
 
 .btn:hover {

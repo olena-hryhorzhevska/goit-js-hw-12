@@ -24,6 +24,10 @@ body {
   margin: 0;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 main {
   flex-grow: 1;
 }
@@ -35,6 +39,7 @@ main:has(.back-link) {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
+  justify-content: center;
 }
 .cat {
   width: 360px;

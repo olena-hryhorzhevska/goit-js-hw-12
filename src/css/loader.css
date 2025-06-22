@@ -7,6 +7,9 @@
   border-right: 4px solid transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
+  margin: 0 auto;
+  margin-bottom: 44px;
+  margin-top: 40px;
 }
 .loader::after {
   content: '';  
