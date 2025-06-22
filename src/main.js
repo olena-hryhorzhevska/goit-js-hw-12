@@ -60,7 +60,6 @@ async function handleSubmit(event) {
   showLoader();
   input = event.currentTarget.elements['search-text'].value;
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000))
     const { images, totalHits } = await getImagesByQuery(input, page);
     if (images.length === 0) {
       showNoResultsToast();
@@ -87,7 +86,6 @@ async function handleLoadMore() {
   showLoader();
 
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000));
     const { images } = await getImagesByQuery(input, page);
     createGallery(images);
 
