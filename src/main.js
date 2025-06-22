@@ -7,6 +7,7 @@ import {
   showLoadMoreButton,
   hideLoadMoreButton,
 } from './js/render-functions';
+import crossIcon from './img/cross.png';
 
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
@@ -17,7 +18,7 @@ function showNoResultsToast() {
       'Sorry, there are no images matching your search query. Please try again!',
     backgroundColor: '#EF4040',
     messageColor: '#FAFAFB',
-    iconUrl: './img/cross.png',
+    iconUrl: crossIcon,
   });
   return;
 }
